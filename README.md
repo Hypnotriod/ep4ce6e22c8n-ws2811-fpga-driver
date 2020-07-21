@@ -1,6 +1,6 @@
 # ep4ce6e22c8n-ws2811-fpga-driver
 
-FPGA driver application for `WS2811` designed with `Verilog HDL` for `Cyclone IV` `EP4CE6E22C8N` model.  
+FPGA driver application for `WS2811` designed with `SystemVerilog HDL` for `Cyclone IV` `EP4CE6E22C8N` model.  
 Used `M9K` embedded memory blocks of `Cyclone IV` family, configured as ROM, to store color patterns.
 
 ## Hardware:  
