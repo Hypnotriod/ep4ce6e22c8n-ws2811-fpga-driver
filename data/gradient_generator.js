@@ -1,8 +1,8 @@
 fs = require("fs");
 
-let ROM_FILE_NAME = "rom.mif";
-let COLORS_NUM = 128;
-let COLORS = [0xff0000, 0xff0000, 0xff00ff, 0xff00ff, 0x0000ff, 0x0000ff, 0xFF00FF, 0xFF00FF, 0xFFFF00, 0xFFFF00, 0x00FFFF, 0x00FFFF, 0x00FF00, 0x00FF00, 0xFF0000];
+const ROM_FILE_NAME = "rom.mif";
+const COLORS_NUM = 128;
+const COLORS = [0xff0000, 0xff0000, 0xff00ff, 0xff00ff, 0x0000ff, 0x0000ff, 0xFF00FF, 0xFF00FF, 0xFFFF00, 0xFFFF00, 0x00FFFF, 0x00FFFF, 0x00FF00, 0x00FF00, 0xFF0000];
 
 function getRed(color) { return ((color >> 16) & 0xFF) }
 function getGreen(color) { return ((color >> 8) & 0xFF) }
@@ -40,8 +40,7 @@ function generate() {
 	return result;
 }
 
-let romData = generate();
-fs.writeFile(ROM_FILE_NAME, romData, (err) => {
+fs.writeFile(ROM_FILE_NAME, generate(), (err) => {
 	if (err) {
 		console.log("Failed");
 		console.log(err);
