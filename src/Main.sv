@@ -7,6 +7,7 @@ module Main
 (
 	input	clkIN,
 	input	nResetIN,
+	input rxIN,
 	output txOUT
 );
 
