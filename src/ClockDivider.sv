@@ -1,4 +1,8 @@
 
+/*
+*  Author: Ilya Pikin
+*/
+
 module ClockDivider
 # (
 	parameter VALUE = 2

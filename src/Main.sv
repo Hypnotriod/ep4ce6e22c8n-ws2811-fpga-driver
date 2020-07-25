@@ -1,4 +1,8 @@
 
+/*
+*  Author: Ilya Pikin
+*/
+
 module Main
 (
 	input	clkIN,
@@ -6,20 +10,27 @@ module Main
 	output dataOUT
 );
 
-parameter UNITS_NUMBER = 100;
-parameter PATTERN_PIXELS_NUMBER = 128;
-parameter CLOCK_SPEED = 50_000_000;
-parameter UPDATES_PER_SECOND = 20;
+localparam UNITS_NUMBER = 100;
+localparam PATTERN_PIXELS_NUMBER = 128;
+localparam CLOCK_SPEED = 50_000_000;
+localparam UPDATES_PER_SECOND = 20;
 
-reg [$clog2(PATTERN_PIXELS_NUMBER - 1):0] romAddress = 0;
-reg [$clog2(PATTERN_PIXELS_NUMBER - 1):0] romShiftAddress = 0;
-reg [$clog2(UNITS_NUMBER - 1):0] unitIndex = UNITS_NUMBER;
-reg txStart = 0;
+reg [$clog2(PATTERN_PIXELS_NUMBER - 1):0] romAddress;
+reg [$clog2(PATTERN_PIXELS_NUMBER - 1):0] romShiftAddress;
+reg [$clog2(UNITS_NUMBER - 1):0] unitIndex;
+reg txStart;
 
 wire busy;
 wire beginTransmission;
 wire [23:0] romData;
 wire [$clog2(PATTERN_PIXELS_NUMBER - 1):0] romAddressComputed = romAddress + romShiftAddress;
+
+initial begin
+	romAddress = 0;
+	romShiftAddress = 0;
+	unitIndex = UNITS_NUMBER;
+	txStart = 0;
+end
 
 ROM1 rom(.clock(clkIN), .address(romAddressComputed), .q(romData));
 

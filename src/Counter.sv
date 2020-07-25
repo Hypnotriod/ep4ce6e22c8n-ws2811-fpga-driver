@@ -1,4 +1,8 @@
 
+/*
+*  Author: Ilya Pikin
+*/
+
 module Counter
 # (
 	parameter TOP = 2
@@ -6,26 +10,32 @@ module Counter
 (
 	input clkIN,
 	input nResetIN,
-	output reg [$clog2(TOP - 1):0] counterOUT,
-	output reg counterOverflowOUT
+	output [$clog2(TOP - 1):0] counterOUT,
+	output counterOverflowOUT
 );
 
+reg [$clog2(TOP - 1):0] counter;
+reg counterOverflow;
+
 initial begin
-	counterOUT = 0;
+	counter = 0;
 end
+
+assign counterOUT = counter;
+assign counterOverflowOUT = counterOverflow;
 
 always @(posedge clkIN or negedge nResetIN) begin
 	if (~nResetIN) begin
-		counterOUT <= 0;
-		counterOverflowOUT <= 0;
+		counter <= 0;
+		counterOverflow <= 0;
 	end
-	else if (counterOUT == TOP - 1) begin
-		counterOUT <= 0;
-		counterOverflowOUT <= 1;
+	else if (counter == TOP - 1) begin
+		counter <= 0;
+		counterOverflow <= 1;
 	end
 	else begin
-		counterOUT <= counterOUT + 1;
-		counterOverflowOUT <= 0;
+		counter <= counter + 1;
+		counterOverflow <= 0;
 	end
 end
 	 
