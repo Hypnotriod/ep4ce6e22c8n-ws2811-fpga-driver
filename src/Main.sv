@@ -44,26 +44,35 @@ ClockDivider #(.VALUE(CLOCK_SPEED / UPDATES_PER_SECOND))
 WS2811Transmitter #(.CLOCK_SPEED(CLOCK_SPEED)) 
 	ws2811tx (
 	.clkIN(clkIN),
+	.nResetIN(nResetIN),
 	.startIN(txStart),
 	.dataIN(romData),
 	.busyOUT(busy),
 	.txOUT(txOUT)
 );
 
-always @(posedge clkIN) begin
-	if (beginTransmission) begin
-		unitIndex <= 0;
+always @(posedge clkIN or negedge nResetIN) begin
+	if (~nResetIN) begin
 		romAddress <= 0;
-		romShiftAddress <= romShiftAddress + 1;
-	end
-
-	if (unitIndex != UNITS_NUMBER && ~busy) begin
-		romAddress <= romAddress + 1;
-		unitIndex <= unitIndex + 1;
-		txStart <= 1;
+		romShiftAddress <= 0;
+		unitIndex <= UNITS_NUMBER;
+		txStart <= 0;
 	end
 	else begin
-		txStart <= 0;
+		if (beginTransmission) begin
+			unitIndex <= 0;
+			romAddress <= 0;
+			romShiftAddress <= romShiftAddress + 1;
+		end
+
+		if (unitIndex != UNITS_NUMBER && ~busy) begin
+			romAddress <= romAddress + 1;
+			unitIndex <= unitIndex + 1;
+			txStart <= 1;
+		end
+		else begin
+			txStart <= 0;
+		end
 	end
 end
 

@@ -9,6 +9,7 @@ module WS2811Transmitter
 )
 (
 	input	clkIN,
+	input	nResetIN,
 	input startIN,
 	input [23:0] dataIN,
 	output busyOUT,
@@ -40,30 +41,37 @@ ClockDivider #(.VALUE(CLOCK_SPEED / DIVIDER_100_NS)) clock100nsDivider (
 	.clkOUT(clock100ns)
 );
 
-always @(negedge clkIN) begin
-	if (startIN && ~busy) begin
-		busy <= 1;
-		dataShift <= {dataIN, 1'b1};
-		tx <= 1;
+always @(negedge clkIN or negedge nResetIN) begin
+	if (~nResetIN) begin
+		busy <= 0;
+		tx  <= 0;
+		cnt100ns <= 5'd0;
 	end
-	
-	if (clock100ns && busy) begin
-		cnt100ns <= cnt100ns + 5'd1;
-		if (cnt100ns == 5'd4 && ~dataShift[24]) begin
-			tx <= 0;
+	else begin
+		if (startIN && ~busy) begin
+			busy <= 1;
+			dataShift <= {dataIN, 1'b1};
+			tx <= 1;
 		end
-		if (cnt100ns == 5'd11 && dataShift[24]) begin
-			tx <= 0;
-		end
-		if (cnt100ns == 5'd24) begin
-			cnt100ns <= 5'd0;
-			dataShift <= dataShifted;
-			if (dataShifted == 25'h1000000) begin
-				busy <= 0;
+		
+		if (clock100ns && busy) begin
+			cnt100ns <= cnt100ns + 5'd1;
+			if (cnt100ns == 5'd4 && ~dataShift[24]) begin
+				tx <= 0;
 			end
-			else begin
-				tx <= 1;
-			end			
+			if (cnt100ns == 5'd11 && dataShift[24]) begin
+				tx <= 0;
+			end
+			if (cnt100ns == 5'd24) begin
+				cnt100ns <= 5'd0;
+				dataShift <= dataShifted;
+				if (dataShifted == 25'h1000000) begin
+					busy <= 0;
+				end
+				else begin
+					tx <= 1;
+				end			
+			end
 		end
 	end
 end
