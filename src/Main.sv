@@ -7,7 +7,7 @@ module Main
 (
 	input	clkIN,
 	input	nResetIN,
-	output dataOUT
+	output txOUT
 );
 
 localparam UNITS_NUMBER = 100;
@@ -47,7 +47,7 @@ WS2811Transmitter #(.CLOCK_SPEED(CLOCK_SPEED))
 	.startIN(txStart),
 	.dataIN(romData),
 	.busyOUT(busy),
-	.dataOUT(dataOUT)
+	.txOUT(txOUT)
 );
 
 always @(posedge clkIN) begin

@@ -52,14 +52,8 @@ set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "SYSTEMVERILOG HDL" -section_id eda_simulation
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_global_assignment -name SYSTEMVERILOG_FILE src/WS2811Transmitter.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/Main.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/Counter.sv
-set_global_assignment -name SYSTEMVERILOG_FILE src/ClockDivider.sv
 set_location_assignment PIN_23 -to clkIN
 set_location_assignment PIN_25 -to nResetIN
-set_location_assignment PIN_105 -to dataOUT
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dataOUT
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to nResetIN
 set_global_assignment -name ENABLE_OCT_DONE OFF
 set_global_assignment -name ENABLE_CONFIGURATION_PINS OFF
@@ -71,8 +65,16 @@ set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name SYSTEMVERILOG_FILE src/NecIrReceiver.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/WS2811Transmitter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/Main.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/Counter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/ClockDivider.sv
 set_global_assignment -name VECTOR_WAVEFORM_FILE waveform/WS2811Transmitter.vwf
 set_global_assignment -name QIP_FILE src/ROM1.qip
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to txOUT
+set_location_assignment PIN_105 -to txOUT
+set_global_assignment -name VECTOR_WAVEFORM_FILE waveform/NecIrReceiver.vwf
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top

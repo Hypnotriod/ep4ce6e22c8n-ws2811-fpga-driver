@@ -23,6 +23,7 @@ quit -f
 
 
 
+
 </modelsim_script>
 <modelsim_script_timing>onerror {exit -code 1}
 vlib work
@@ -41,6 +42,7 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
 
 
 
@@ -352,7 +354,7 @@ SIGNAL("dataIN[0]")
 	PARENT = "dataIN";
 }
 
-SIGNAL("dataOUT")
+SIGNAL("txOUT")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
@@ -377,8 +379,7 @@ TRANSITION_LIST("busyOUT")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 999.0;
-		LEVEL 0 FOR 60001.0;
+		LEVEL X FOR 61000.0;
 	}
 }
 
@@ -616,13 +617,12 @@ TRANSITION_LIST("dataIN[0]")
 	}
 }
 
-TRANSITION_LIST("dataOUT")
+TRANSITION_LIST("txOUT")
 {
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 999.0;
-		LEVEL 0 FOR 60001.0;
+		LEVEL X FOR 61000.0;
 	}
 }
 
@@ -657,7 +657,7 @@ DISPLAY_LINE
 DISPLAY_LINE
 {
 	CHANNEL = "dataIN";
-	EXPAND_STATUS = EXPANDED;
+	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 2;
 	TREE_LEVEL = 0;
@@ -906,7 +906,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "dataOUT";
+	CHANNEL = "txOUT";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 27;
