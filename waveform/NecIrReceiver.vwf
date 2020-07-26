@@ -27,6 +27,8 @@ quit -f
 
 
 
+
+
 </modelsim_script>
 <modelsim_script_timing>onerror {exit -code 1}
 vlib work
@@ -45,6 +47,8 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
+
 
 
 
@@ -440,7 +444,7 @@ SIGNAL("rxIN")
 	PARENT = "";
 }
 
-SIGNAL("rxReadyOUT")
+SIGNAL("dataReceivedOUT")
 {
 	VALUE_TYPE = NINE_LEVEL_BIT;
 	SIGNAL_TYPE = SINGLE_BIT;
@@ -835,13 +839,11 @@ TRANSITION_LIST("rxIN")
 		LEVEL 1 FOR 562.5;
 		LEVEL 0 FOR 562.5;
 		LEVEL 1 FOR 562.5;
-		LEVEL 0 FOR 2812.5;
-		LEVEL 1 FOR 562.5;
-		LEVEL 0 FOR 13000.0;
+		LEVEL 0 FOR 16375.0;
 	}
 }
 
-TRANSITION_LIST("rxReadyOUT")
+TRANSITION_LIST("dataReceivedOUT")
 {
 	NODE
 	{
@@ -888,7 +890,7 @@ DISPLAY_LINE
 
 DISPLAY_LINE
 {
-	CHANNEL = "rxReadyOUT";
+	CHANNEL = "dataReceivedOUT";
 	EXPAND_STATUS = COLLAPSED;
 	RADIX = Binary;
 	TREE_INDEX = 3;

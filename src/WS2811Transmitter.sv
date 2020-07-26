@@ -16,7 +16,7 @@ module WS2811Transmitter
 	output txOUT
 );
 
-localparam DIVIDER_100_NS = 10_000_000;
+localparam DIVIDER_100_NS = 10_000_000; // 1 / 0.0000001 = 10000000
 
 reg [4:0]  cnt100ns;
 reg [24:0] dataShift;

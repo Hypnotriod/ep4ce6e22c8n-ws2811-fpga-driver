@@ -11,31 +11,37 @@ module NecIrReceiver
 	input	clkIN,
 	input	nResetIN,
 	input rxIN,
-	output rxReadyOUT,
+	output dataReceivedOUT,
 	output [31:0] dataOUT
 );
 
-localparam DIVIDER_281250_NS = 3556; // 562.5µs / 2 = 281.25µs
+localparam DIVIDER_281250_NS = 3556; // 562.5µs / 2 = 281.25µs; 1 / 0.00028125 ≈ 3556
 
-reg [23:0] timingShift;
+reg [23:0] pulseSamplerShift;
 reg [33:0] dataShift;
+reg [31:0] dataBuffer;
+reg [1:0] rxState;
 reg rxPositiveEdgeDetect;
 reg clock281250nsParity;
 reg clock281250nsNReset;
 
 wire clock281250ns;
 wire startFrameReceived;
+wire dataPacketReceived;
 
 initial begin
+	rxState = 2'd0;
 	rxPositiveEdgeDetect = 0;
 	clock281250nsParity = 0;
 	clock281250nsNReset = 1;
-	timingShift = 24'd0;
+	pulseSamplerShift = 24'd0;
 	dataShift = 34'd0;
+	dataBuffer = 32'd0;
 end
 
-assign dataOUT = dataShift[31:0];
-assign rxReadyOUT = dataShift[32];
+assign dataReceivedOUT = rxState[0];
+assign dataOUT = dataBuffer;
+assign dataPacketReceived = dataShift[32];
 assign startFrameReceived = dataShift[33];
 
 ClockDivider #(.VALUE(CLOCK_SPEED / DIVIDER_281250_NS)) clock281250nsDivider (
@@ -46,20 +52,22 @@ ClockDivider #(.VALUE(CLOCK_SPEED / DIVIDER_281250_NS)) clock281250nsDivider (
 
 always @(posedge clkIN or negedge nResetIN) begin
 	if (~nResetIN) begin
+		rxState <= 2'd0;
 		rxPositiveEdgeDetect <= 0;
 		clock281250nsParity <= 0;
 		clock281250nsNReset <= 1;
-		timingShift <= 24'd0;
+		pulseSamplerShift <= 24'd0;
 		dataShift <= 34'd0;
+		dataBuffer <= 32'd0;
 	end
 	else begin
 		if (rxIN && ~rxPositiveEdgeDetect) begin
 			rxPositiveEdgeDetect <= 1;
 			clock281250nsParity <= 0;
 			clock281250nsNReset <= 0;
-			timingShift <= 24'd0;
+			pulseSamplerShift <= 24'd0;
 			
-			case ({startFrameReceived, rxReadyOUT, timingShift})
+			case ({startFrameReceived, dataPacketReceived, pulseSamplerShift})
 				26'h0ffff00 : dataShift <= 34'h200000001;
 				26'h2000002 : dataShift <= {dataShift[33], dataShift[31:0], 1'd0};
 				26'h2000008 : dataShift <= {dataShift[33], dataShift[31:0], 1'd1};
@@ -67,11 +75,22 @@ always @(posedge clkIN or negedge nResetIN) begin
 			endcase
 		end
 		
+		if (dataPacketReceived && rxState == 2'd0) begin
+			dataBuffer[31:0] <= dataShift[31:0];
+			rxState <= 2'b11;
+		end
+		else if (rxState == 2'b11) begin
+			rxState <= 2'b10;
+		end
+		else if (~dataPacketReceived) begin
+			rxState <= 2'd0;
+		end
+		
 		if (clock281250ns) begin
 			clock281250nsParity <= ~clock281250nsParity;
 			
 			if (~clock281250nsParity) begin
-				timingShift <= {timingShift[22:0], rxIN};
+				pulseSamplerShift <= {pulseSamplerShift[22:0], rxIN};
 			end
 		end
 		
