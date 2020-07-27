@@ -19,14 +19,14 @@ localparam UPDATES_PER_SECOND = 20;
 
 reg [$clog2(PATTERNS_NUMBER - 1):0] patternIndex;
 reg [$clog2(PATTERN_COLORS_NUMBER - 1):0] colorIndex;
-reg [$clog2(PATTERN_COLORS_NUMBER - 1):0] romShiftAddress;
+reg [$clog2(PATTERN_COLORS_NUMBER - 1):0] colorIndexShift;
 reg [$clog2(UNITS_NUMBER - 1):0] unitIndex;
 reg txStart;
 
 wire busy;
 wire beginTransmission;
 wire [23:0] romData;
-wire [$clog2(PATTERNS_NUMBER + PATTERN_COLORS_NUMBER - 1):0] colorIndexComputed = {patternIndex, colorIndex + romShiftAddress};
+wire [$clog2(PATTERNS_NUMBER + PATTERN_COLORS_NUMBER - 1):0] colorIndexComputed = {patternIndex, colorIndex + colorIndexShift};
 wire irCommandReceived;
 wire [31:0] irCommand;
 wire rxFiltered;
@@ -34,7 +34,7 @@ wire rxFiltered;
 initial begin
 	patternIndex = 0;
 	colorIndex = 0;
-	romShiftAddress = 0;
+	colorIndexShift = 0;
 	unitIndex = UNITS_NUMBER;
 	txStart = 0;
 end
@@ -77,7 +77,7 @@ always @(posedge clkIN or negedge nResetIN) begin
 	if (~nResetIN) begin
 		patternIndex <= 0;
 		colorIndex <= 0;
-		romShiftAddress <= 0;
+		colorIndexShift <= 0;
 		unitIndex <= UNITS_NUMBER;
 		txStart <= 0;
 	end
@@ -92,10 +92,10 @@ always @(posedge clkIN or negedge nResetIN) begin
 		if (beginTransmission) begin
 			unitIndex <= 0;
 			colorIndex <= 0;
-			romShiftAddress <= romShiftAddress + 1;
+			txStart <= 1;
+			colorIndexShift <= colorIndexShift + 1;
 		end
-
-		if (unitIndex != UNITS_NUMBER && ~busy) begin
+		else if (unitIndex != UNITS_NUMBER && ~busy) begin
 			colorIndex <= colorIndex + 1;
 			unitIndex <= unitIndex + 1;
 			txStart <= 1;
