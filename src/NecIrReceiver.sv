@@ -61,29 +61,34 @@ always @(posedge clkIN or negedge nResetIN) begin
 		dataBuffer <= 32'd0;
 	end
 	else begin
-		if (rxIN && ~rxPositiveEdgeDetect) begin
-			rxPositiveEdgeDetect <= 1;
-			clock281250nsParity <= 0;
-			clock281250nsNReset <= 0;
-			pulseSamplerShift <= 24'd0;
-			
-			case ({startFrameReceived, dataPacketReceived, pulseSamplerShift})
-				26'h0ffff00 : dataShift <= 34'h200000001;
-				26'h2000002 : dataShift <= {dataShift[33], dataShift[31:0], 1'd0};
-				26'h2000008 : dataShift <= {dataShift[33], dataShift[31:0], 1'd1};
-				default : dataShift <= 34'd0;
-			endcase
-		end
+		case ({dataPacketReceived, rxState[1:0]})
+			3'b100 : begin
+				dataBuffer[31:0] <= dataShift[31:0];
+				rxState <= 2'b11;
+			end
+			3'b111, 3'b110 : rxState <= 2'b10;
+			default : rxState <= 2'd0;
+		endcase
 		
-		if (dataPacketReceived && rxState == 2'd0) begin
-			dataBuffer[31:0] <= dataShift[31:0];
-			rxState <= 2'b11;
-		end
-		else if (rxState == 2'b11) begin
-			rxState <= 2'b10;
-		end
-		else if (~dataPacketReceived) begin
-			rxState <= 2'd0;
+		case ({rxIN, rxPositiveEdgeDetect})
+			2'b10 : begin
+				rxPositiveEdgeDetect <= 1;
+				clock281250nsParity <= 0;
+				clock281250nsNReset <= 0;
+				pulseSamplerShift <= 24'd0;
+				
+				case ({startFrameReceived, dataPacketReceived, pulseSamplerShift})
+					26'h0ffff00 : dataShift <= 34'h200000001;
+					26'h2000002 : dataShift <= {dataShift[33], dataShift[31:0], 1'd0};
+					26'h2000008 : dataShift <= {dataShift[33], dataShift[31:0], 1'd1};
+					default : dataShift <= 34'd0;
+				endcase
+			end
+			2'b01 : rxPositiveEdgeDetect <= 0;
+		endcase
+		
+		if (clock281250nsNReset == 0) begin
+			clock281250nsNReset <= 1;
 		end
 		
 		if (clock281250ns) begin
@@ -92,14 +97,6 @@ always @(posedge clkIN or negedge nResetIN) begin
 			if (~clock281250nsParity) begin
 				pulseSamplerShift <= {pulseSamplerShift[22:0], rxIN};
 			end
-		end
-		
-		if (rxPositiveEdgeDetect == 1) begin
-			clock281250nsNReset <= 1;
-		end
-		
-		if (~rxIN && rxPositiveEdgeDetect) begin
-			rxPositiveEdgeDetect <= 0;
 		end
 	end
 end
