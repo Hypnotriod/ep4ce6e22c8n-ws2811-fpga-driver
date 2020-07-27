@@ -33,7 +33,7 @@ initial begin
 	rxState = 2'd0;
 	rxPositiveEdgeDetect = 0;
 	clock281250nsParity = 0;
-	clock281250nsNReset = 1;
+	clock281250nsNReset = 0;
 	pulseSamplerShift = 24'd0;
 	dataShift = 34'd0;
 	dataBuffer = 32'd0;
@@ -55,7 +55,7 @@ always @(posedge clkIN or negedge nResetIN) begin
 		rxState <= 2'd0;
 		rxPositiveEdgeDetect <= 0;
 		clock281250nsParity <= 0;
-		clock281250nsNReset <= 1;
+		clock281250nsNReset <= 0;
 		pulseSamplerShift <= 24'd0;
 		dataShift <= 34'd0;
 		dataBuffer <= 32'd0;
