@@ -79,8 +79,8 @@ always @(posedge clkIN or negedge nResetIN) begin
 				
 				case ({startFrameReceived, dataPacketReceived, pulseSamplerShift})
 					26'h0ffff00 : dataShift <= 34'h200000001;
-					26'h2000002 : dataShift <= {dataShift[33], dataShift[31:0], 1'd0};
-					26'h2000008 : dataShift <= {dataShift[33], dataShift[31:0], 1'd1};
+					26'h2000002 : dataShift <= {1'd1, dataShift[31:0], 1'd0};
+					26'h2000008 : dataShift <= {1'd1, dataShift[31:0], 1'd1};
 					default : dataShift <= 34'd0;
 				endcase
 			end
