@@ -8,7 +8,7 @@ Implemented `NEC Infrared Transmission Protocol` receiver, to switch color patte
 ## Hardware:  
 * `EasyFPGA A2.2` board [documentation](https://forum.maxiol.com/lofiversion/index.php/t5332.html)
 * `WS2811` based 50x RGB LED string from [aliexpress](https://www.aliexpress.com/item/32788470822.html)
-* [Infrared (IR) Remote Control Codes](https://gist.github.com/steakknife/e419241095f1272ee60f5174f7759867)
+* Car MP3 SE-020401 Infrared (IR) remote control [scan codes and specification](https://gist.github.com/steakknife/e419241095f1272ee60f5174f7759867)
 
 ## Connection:  
 * IR in -> PIN_100
