@@ -11,6 +11,9 @@ module Main
 	output txOUT
 );
 
+localparam IR_COMMAND_PREV = 32'h00ff22dd;
+localparam IR_COMMAND_NEXT = 32'h00ff02fd;
+
 localparam UNITS_NUMBER = 100;
 localparam PATTERN_COLORS_NUMBER = 128;
 localparam PATTERNS_NUMBER = 4;
@@ -84,8 +87,8 @@ always @(posedge clkIN or negedge nResetIN) begin
 	else begin
 		if (irCommandReceived) begin
 			case (irCommand)
-				32'h00ff02fd : patternIndex <= patternIndex + 1;
-				32'h00ff22dd : patternIndex <= patternIndex - 1;
+				IR_COMMAND_NEXT : patternIndex <= patternIndex + 1;
+				IR_COMMAND_PREV : patternIndex <= patternIndex - 1;
 			endcase
 		end
 	
