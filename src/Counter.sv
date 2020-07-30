@@ -10,7 +10,7 @@ module Counter
 (
 	input clkIN,
 	input nResetIN,
-	output [$clog2(TOP - 1):0] counterOUT,
+	output [$clog2(TOP) - 1:0] counterOUT,
 	output counterOverflowOUT
 );
 

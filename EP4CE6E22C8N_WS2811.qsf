@@ -75,6 +75,8 @@ set_global_assignment -name SYSTEMVERILOG_FILE src/Main.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/Counter.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/ClockDivider.sv
 set_global_assignment -name SYSTEMVERILOG_FILE src/RXMajority3Filter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/ColorSwap.sv
+set_global_assignment -name SYSTEMVERILOG_FILE src/CyclicShifter24.sv
 set_global_assignment -name QIP_FILE src/ROM1.qip
 set_global_assignment -name VECTOR_WAVEFORM_FILE waveform/WS2811Transmitter.vwf
 set_global_assignment -name VECTOR_WAVEFORM_FILE waveform/NecIrReceiver.vwf
