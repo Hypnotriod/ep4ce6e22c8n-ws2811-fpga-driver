@@ -1,5 +1,7 @@
 
 /*
+* Counter.sv
+*
 *  Author: Ilya Pikin
 */
 
@@ -25,7 +27,7 @@ assign counterOUT = counter;
 assign counterOverflowOUT = counterOverflow;
 
 always @(posedge clkIN or negedge nResetIN) begin
-	if (~nResetIN) begin
+	if (!nResetIN) begin
 		counter <= 0;
 		counterOverflow <= 0;
 	end

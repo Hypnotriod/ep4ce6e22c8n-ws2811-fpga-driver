@@ -1,5 +1,7 @@
 
 /*
+* NecIrReceiver.sv
+*
 *  Author: Ilya Pikin
 */
 
@@ -51,7 +53,7 @@ ClockDivider #(.VALUE(CLOCK_SPEED / DIVIDER_281250_NS)) clock281250nsDivider (
 );
 
 always @(posedge clkIN or negedge nResetIN) begin
-	if (~nResetIN) begin
+	if (!nResetIN) begin
 		rxState <= 2'd0;
 		rxPositiveEdgeDetect <= 0;
 		clock281250nsParity <= 0;
@@ -94,7 +96,7 @@ always @(posedge clkIN or negedge nResetIN) begin
 		if (clock281250ns) begin
 			clock281250nsParity <= ~clock281250nsParity;
 			
-			if (~clock281250nsParity) begin
+			if (!clock281250nsParity) begin
 				pulseSamplerShift <= {pulseSamplerShift[22:0], rxIN};
 			end
 		end

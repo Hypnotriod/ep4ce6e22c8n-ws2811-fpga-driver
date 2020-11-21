@@ -1,5 +1,7 @@
 
 /*
+* WS2811Transmitter.sv
+*
 *  Author: Ilya Pikin
 */
 
@@ -42,13 +44,13 @@ ClockDivider #(.VALUE(CLOCK_SPEED / DIVIDER_100_NS)) clock100nsDivider (
 );
 
 always @(negedge clkIN or negedge nResetIN) begin
-	if (~nResetIN) begin
+	if (!nResetIN) begin
 		busy <= 0;
 		tx  <= 0;
 		cnt100ns <= 5'd0;
 	end
 	else begin
-		if (startIN && ~busy) begin
+		if (startIN && !busy) begin
 			busy <= 1;
 			dataShift <= {dataIN, 1'b1};
 			tx <= 1;
@@ -56,7 +58,7 @@ always @(negedge clkIN or negedge nResetIN) begin
 		
 		if (clock100ns && busy) begin
 			cnt100ns <= cnt100ns + 5'd1;
-			if (cnt100ns == 5'd4 && ~dataShift[24]) begin
+			if (cnt100ns == 5'd4 && !dataShift[24]) begin
 				tx <= 0;
 			end
 			if (cnt100ns == 5'd11 && dataShift[24]) begin

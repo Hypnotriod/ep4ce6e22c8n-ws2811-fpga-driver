@@ -1,5 +1,7 @@
 
 /*
+* Main.sv
+*
 *  Author: Ilya Pikin
 */
 
@@ -29,7 +31,7 @@ reg [$clog2(PATTERN_COLORS_NUMBER) - 1:0] colorIndex;
 reg [$clog2(PATTERN_COLORS_NUMBER) - 1:0] colorIndexShift;
 reg colorIndexShiftDirection;
 reg [2:0] colorSwapIndex;
-reg [$clog2(UNITS_NUMBER) - 1:0] unitIndex;
+reg [$clog2(UNITS_NUMBER) - 1:0] unitCounter;
 reg txStart;
 reg pause;
 reg beginTransmissionDelay;
@@ -49,7 +51,7 @@ initial begin
 	colorIndexShift = 0;
 	colorIndexShiftDirection = 0;
 	colorSwapIndex = 0;
-	unitIndex = UNITS_NUMBER;
+	unitCounter = 0;
 	txStart = 0;
 	pause = 0;
 	beginTransmissionDelay <= 0;
@@ -71,6 +73,7 @@ ColorSwap colorSwapper (
 
 RXMajority3Filter rxInFilter (
 	.clockIN(clkIN),
+	.nResetIN(nResetIN),
 	.rxIN(rxIN),
 	.rxOUT(rxFiltered)
 );
@@ -102,13 +105,13 @@ WS2811Transmitter #(.CLOCK_SPEED(CLOCK_SPEED))
 );
 
 always @(posedge clkIN or negedge nResetIN) begin
-	if (~nResetIN) begin
+	if (!nResetIN) begin
 		patternIndex <= 0;
 		colorIndex <= 0;
 		colorIndexShift <= 0;
 		colorIndexShiftDirection <= 0;
 		colorSwapIndex <= 0;
-		unitIndex <= UNITS_NUMBER;
+		unitCounter <= 0;
 		txStart <= 0;
 		pause <= 0;
 		beginTransmissionDelay <= 0;
@@ -126,7 +129,7 @@ always @(posedge clkIN or negedge nResetIN) begin
 		end
 	
 		if (beginTransmission) begin
-			unitIndex <= 0;
+			unitCounter <= UNITS_NUMBER;
 			colorIndex <= 0;
 			case ({colorIndexShiftDirection, pause})
 				2'b10 : colorIndexShift <= colorIndexShift + 1;
@@ -134,12 +137,12 @@ always @(posedge clkIN or negedge nResetIN) begin
 			endcase
 			beginTransmissionDelay <= 1;
 		end
-		else if (beginTransmissionDelay != 0) begin
+		else if (beginTransmissionDelay) begin
 			beginTransmissionDelay <= 0;
 		end
-		else if (unitIndex != UNITS_NUMBER && ~ws2811Busy) begin
+		else if (unitCounter != 0 && !ws2811Busy) begin
 			colorIndex <= colorIndex + 1;
-			unitIndex <= unitIndex + 1;
+			unitCounter <= unitCounter - 1;
 			txStart <= 1;
 		end
 		else begin

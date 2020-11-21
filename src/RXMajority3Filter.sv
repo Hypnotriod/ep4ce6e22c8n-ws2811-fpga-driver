@@ -1,16 +1,36 @@
+
+/*
+* RXMajority3Filter.sv
+*
+*  Author: Ilya Pikin
+*/
+
 module RXMajority3Filter
 (
 	input clockIN,
+	input nResetIN,
 	input rxIN,
-	output wire rxOUT
+	output rxOUT
 );
 
-reg [2:0] rxLock = 3'b111;
+wire out;
 
-assign rxOUT = (rxLock[0] & rxLock[1]) | (rxLock[0] & rxLock[2]) | (rxLock[1] & rxLock[2]);
+reg [2:0] rxShift;
 
-always @(posedge clockIN) begin
-	rxLock <= {rxIN, rxLock[2:1]};
+initial begin
+	rxShift = 3'b111;
+end
+
+assign rxOUT = out;
+assign out = (rxShift[0] & rxShift[1]) | (rxShift[0] & rxShift[2]) | (rxShift[1] & rxShift[2]);
+
+always @(posedge clockIN or negedge nResetIN) begin
+	if (!nResetIN) begin
+		rxShift = 3'b111;
+	end
+	else begin
+		rxShift <= {rxIN, rxShift[2:1]};
+	end
 end
 
 endmodule
