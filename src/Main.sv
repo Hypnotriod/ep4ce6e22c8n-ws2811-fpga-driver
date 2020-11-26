@@ -54,7 +54,7 @@ initial begin
 	unitCounter = 0;
 	txStart = 0;
 	pause = 0;
-	beginTransmissionDelay <= 0;
+	beginTransmissionDelay = 0;
 end
 
 assign colorIndexComputed = {patternIndex, (colorIndex + colorIndexShift)};
