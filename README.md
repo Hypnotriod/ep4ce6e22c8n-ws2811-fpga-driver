@@ -16,4 +16,4 @@ Implemented `NEC Infrared Transmission Protocol` receiver, to switch color patte
 
 ## YouTybe
 
-[![](https://www.youtube.com/watch?v=iHeRbUg_Yys/0.jpg)](https://www.youtube.com/watch?v=iHeRbUg_Yys "")
+[![](http://img.youtube.com/vi/iHeRbUg_Yys/0.jpg)](https://www.youtube.com/watch?v=iHeRbUg_Yys "")
