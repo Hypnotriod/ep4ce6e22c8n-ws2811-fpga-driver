@@ -7,7 +7,7 @@
 
 module ColorSwap
 (
-	input	[23:0]dataIN,
+	input [23:0]dataIN,
 	input [2:0] swapIN,
 	output [23:0] dataOUT
 );
