@@ -10,8 +10,8 @@ module NecIrReceiver
 	CLOCK_SPEED = 50_000
 )
 (
-	input	clkIN,
-	input	nResetIN,
+	input clkIN,
+	input nResetIN,
 	input rxIN,
 	output dataReceivedOUT,
 	output [31:0] dataOUT
