@@ -7,7 +7,7 @@
 
 module CyclicShifter24
 (
-	input	[23:0]dataIN,
+	input [23:0]dataIN,
 	input [4:0] shiftIN,
 	output [23:0] dataOUT
 );
