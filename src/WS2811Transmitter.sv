@@ -10,8 +10,8 @@ module WS2811Transmitter
 	CLOCK_SPEED = 50_000_000
 )
 (
-	input	clkIN,
-	input	nResetIN,
+	input clkIN,
+	input nResetIN,
 	input startIN,
 	input [23:0] dataIN,
 	output busyOUT,
