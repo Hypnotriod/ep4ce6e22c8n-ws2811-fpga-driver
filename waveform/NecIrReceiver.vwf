@@ -1,8 +1,8 @@
 /*<simulation_settings>
 <ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=verilog --write_settings_files=off EP4CE6E22C8N_WS2811 -c EP4CE6E22C8N_WS2811 --vector_source="./waveform/NecIrReceiver.vwf" --testbench_file="./simulation/qsim/NecIrReceiver.vwf.vt"</ftestbench_cmd>
 <ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=verilog --write_settings_files=off EP4CE6E22C8N_WS2811 -c EP4CE6E22C8N_WS2811 --vector_source="./waveform/NecIrReceiver.vwf" --testbench_file="./simulation/qsim/NecIrReceiver.vwf.vt"</ttestbench_cmd>
-<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=verilog --output_directory="C:/Projects/Qartus/EP4CE6E22C8N_WS2811/simulation/qsim/" EP4CE6E22C8N_WS2811 -c EP4CE6E22C8N_WS2811</fnetlist_cmd>
-<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=verilog --output_directory="C:/Projects/Qartus/EP4CE6E22C8N_WS2811/simulation/qsim/" EP4CE6E22C8N_WS2811 -c EP4CE6E22C8N_WS2811</tnetlist_cmd>
+<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=verilog --output_directory="./simulation/qsim/" EP4CE6E22C8N_WS2811 -c EP4CE6E22C8N_WS2811</fnetlist_cmd>
+<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=verilog --output_directory="./simulation/qsim/" EP4CE6E22C8N_WS2811 -c EP4CE6E22C8N_WS2811</tnetlist_cmd>
 <modelsim_script>onerror {exit -code 1}
 vlib work
 vlog -work work EP4CE6E22C8N_WS2811.vo
