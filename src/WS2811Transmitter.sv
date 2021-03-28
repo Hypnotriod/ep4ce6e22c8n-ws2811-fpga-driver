@@ -28,12 +28,6 @@ reg tx;
 wire [24:0] dataShifted = (dataShift << 1);
 wire clock100ns;
 
-initial begin
-	busy = 0;
-	tx  = 0;
-	cnt100ns = 5'd0;
-end
-
 assign busyOUT = busy;
 assign txOUT = tx;
 
