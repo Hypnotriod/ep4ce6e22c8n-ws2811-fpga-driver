@@ -45,18 +45,6 @@ wire irCommandReceived;
 wire [31:0] irCommand;
 wire rxFiltered;
 
-initial begin
-	patternIndex = 0;
-	colorIndex = 0;
-	colorIndexShift = 0;
-	colorIndexShiftDirection = 0;
-	colorSwapIndex = 0;
-	unitCounter = 0;
-	txStart = 0;
-	pause = 0;
-	beginTransmissionDelay = 0;
-end
-
 assign colorIndexComputed = {patternIndex, (colorIndex + colorIndexShift)};
 
 ROM1 rom(
