@@ -31,16 +31,6 @@ wire clock281250ns;
 wire startFrameReceived;
 wire dataPacketReceived;
 
-initial begin
-	rxState = 2'd0;
-	rxPositiveEdgeDetect = 0;
-	clock281250nsParity = 0;
-	clock281250nsNReset = 0;
-	pulseSamplerShift = 24'd0;
-	dataShift = 34'd0;
-	dataBuffer = 32'd0;
-end
-
 assign dataReceivedOUT = rxState[0];
 assign dataOUT = dataBuffer;
 assign dataPacketReceived = dataShift[32];
