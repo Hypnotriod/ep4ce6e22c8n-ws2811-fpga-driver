@@ -14,6 +14,6 @@ Implemented `NEC Infrared Transmission Protocol` receiver, to switch color patte
 * IR in -> PIN_100
 * WS2811 out -> PIN_105
 
-## YouTybe
+## YouTube
 
 [![](http://img.youtube.com/vi/iHeRbUg_Yys/0.jpg)](https://www.youtube.com/watch?v=iHeRbUg_Yys "")
